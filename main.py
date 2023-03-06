@@ -3,6 +3,8 @@ import os
 import pandas as pd
 from tweepy import OAuthHandler
 from dotenv import load_dotenv
+import regex as re
+import csv
 
 #
 # fetch tweets using API
@@ -55,8 +57,15 @@ def scrape():
     except BaseException as e:
         print('Status Failed On,',str(e))
 
+def preprocess():
+    tweets = pd.read_csv('Dataset.csv')
 
+    #processing hashtags
+    tweets['hashtag'] = tweets['Tweet'].apply(lambda x: re.findall(r"#(\w+)", x))
+
+    tweets.to_csv('Dataset.csv', index=False)
 
 if __name__ == "__main__": 
     load_dotenv()
     scrape()
+    preprocess()
