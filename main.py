@@ -61,5 +61,5 @@ def scrape():
 
 if __name__ == "__main__": 
     load_dotenv()
-    # scrape()
+    scrape()
     utils.preprocess()
