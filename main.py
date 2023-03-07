@@ -3,8 +3,9 @@ import os
 import pandas as pd
 from tweepy import OAuthHandler
 from dotenv import load_dotenv
-import regex as re
 import csv
+import utils
+
 
 #
 # fetch tweets using API
@@ -57,34 +58,8 @@ def scrape():
     except BaseException as e:
         print('Status Failed On,',str(e))
 
-def preprocess():
-    tweets = pd.read_csv('Dataset.csv')
-
-    #processing hashtags
-    tweets['hashtag'] = tweets['Tweet'].apply(lambda x: re.findall(r"#(\w+)", x))
-
-    #lowercase
-    tweets['tweet_text'] = tweets.Tweet.str.lower()
-
-    #removing hyperlinks
-    tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r'https?:\/\/\S+', '', x))
-    tweets.Tweet.apply(lambda x: re.sub(r"www\.[a-z]?\.?(com)+|[a-z]+\.(com)", '', x))
-    tweets.to_csv('Dataset.csv', index=False)
-
-    #remove video links
-    tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r'{link}', '', x))
-    tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r"\[video\]", '', x))
-
-    #remove non letter characters
-    tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r'\W', ' ', x))
-
-    #remove mentions @
-    tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r'@mention', '', x))
-
-    #remove timestamps in the Date 
-    tweets['Date Created'] = tweets['Date Created'].str.split(' ').str[0]
 
 if __name__ == "__main__": 
     load_dotenv()
-    scrape()
-    preprocess()
+    # scrape()
+    utils.preprocess()
