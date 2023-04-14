@@ -18,7 +18,7 @@ def remove_punctuation(word_list):
 # preprocess data
 #
 def preprocess():
-    tweets = pd.read_csv('Dataset.csv')
+    tweets = pd.read_csv('data/Dataset.csv')
 
     # extract hashtags
     tweets['hashtag'] = tweets['Tweet'].apply(lambda x: re.findall(r"#(\w+)", x))
@@ -36,7 +36,6 @@ def preprocess():
     # removing hyperlinks
     tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r'https?:\/\/\S+', '', x))
     tweets.Tweet.apply(lambda x: re.sub(r"www\.[a-z]?\.?(com)+|[a-z]+\.(com)", '', x))
-    tweets.to_csv('Dataset.csv', index=False)
 
     # remove video links
     tweets.Tweet = tweets.Tweet.apply(lambda x: re.sub(r'{link}', '', x))
@@ -62,4 +61,12 @@ def preprocess():
     tknzr = TweetTokenizer()
     tweets['Tweet_tokens'] = tweets['Tweet'].apply(tknzr.tokenize)
 
-    tweets.to_csv('Preprocessed.csv')
+    # Encoding of categorical variable 'Verified' 
+    tweets['Verified'] = tweets['Verified'].apply(lambda x: 1 if x == 'True' else 0 )
+
+    # Encoding of categorical variable 'Retweeted'
+    tweets['Retweeted'] = tweets['Retweeted'].apply(lambda x: 1 if x == 'True' else 0)
+
+    tweets.to_csv('data/Preprocessed.csv')
+
+preprocess()
