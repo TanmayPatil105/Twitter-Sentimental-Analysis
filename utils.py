@@ -18,7 +18,7 @@ def remove_punctuation(word_list):
 # preprocess data
 #
 def preprocess():
-    tweets = pd.read_csv('data/Dataset.csv')
+    tweets = pd.read_csv('Dataset.csv')
 
     # extract hashtags
     tweets['hashtag'] = tweets['Tweet'].apply(lambda x: re.findall(r"#(\w+)", x))
@@ -67,6 +67,4 @@ def preprocess():
     # Encoding of categorical variable 'Retweeted'
     tweets['Retweeted'] = tweets['Retweeted'].apply(lambda x: 1 if x == 'True' else 0)
 
-    tweets.to_csv('data/Preprocessed.csv')
-
-preprocess()
+    tweets.to_csv('Preprocessed.csv')
