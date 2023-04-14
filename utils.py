@@ -61,10 +61,13 @@ def preprocess():
     tknzr = TweetTokenizer()
     tweets['Tweet_tokens'] = tweets['Tweet'].apply(tknzr.tokenize)
 
-    # Encoding of categorical variable 'Verified' 
+    # One Hot Encoding of categorical variable 'Verified' 
     tweets['Verified'] = tweets['Verified'].apply(lambda x: 1 if x == 'True' else 0 )
 
-    # Encoding of categorical variable 'Retweeted'
+    # One Hot Encoding of categorical variable 'Retweeted'
     tweets['Retweeted'] = tweets['Retweeted'].apply(lambda x: 1 if x == 'True' else 0)
+
+    # One Hot Encoding categorical variable in 'Retweet count'
+    tweets['Retweet count'] = tweets['Retweet count'].apply(lambda x: 0 if x == 'False' else x)
 
     tweets.to_csv('Preprocessed.csv')
