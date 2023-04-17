@@ -1,5 +1,6 @@
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
+from textblob import TextBlob
 import nltk
 import regex as re
 import pandas as pd
@@ -15,10 +16,23 @@ def remove_punctuation(word_list):
     return [w for w in word_list if w not in list]
 
 #
+# classify tweets
+#
+def classify_tweet_sentiment(tweet):
+    analysis = TextBlob(tweet)
+    polarity = analysis.sentiment.polarity
+    if polarity > 0:
+        return 'Positive'
+    elif polarity < 0:
+        return 'Negative'
+    else:
+        return 'Neutral'
+
+#
 # preprocess data
 #
 def preprocess():
-    tweets = pd.read_csv('Dataset.csv')
+    tweets = pd.read_csv('data/Dataset.csv')
 
     # extract hashtags
     tweets['hashtag'] = tweets['Tweet'].apply(lambda x: re.findall(r"#(\w+)", x))
@@ -69,5 +83,8 @@ def preprocess():
 
     # One Hot Encoding categorical variable in 'Retweet count'
     tweets['Retweet count'] = tweets['Retweet count'].apply(lambda x: 0 if x == 'False' else x)
+
+    # Classify tweets
+    tweets['Sentiment'] = tweets['Tweet'].apply(classify_tweet_sentiment)
 
     tweets.to_csv('Preprocessed.csv')
