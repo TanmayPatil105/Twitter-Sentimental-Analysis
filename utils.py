@@ -6,7 +6,6 @@ import regex as re
 import pandas as pd
 import string
 nltk.download('words')
-nltk.download('stopwords')
 
 #
 # remove punctuation
@@ -19,20 +18,19 @@ def remove_punctuation(word_list):
 # classify tweets
 #
 def classify_tweet_sentiment(tweet):
-    analysis = TextBlob(tweet)
-    polarity = analysis.sentiment.polarity
+    blob = TextBlob(tweet)
+    polarity = blob.sentiment.polarity
     if polarity > 0:
-        return 'Positive'
-    elif polarity < 0:
-        return 'Negative'
+        return 1
     else:
-        return 'Neutral'
+        return 0
+
 
 #
 # preprocess data
 #
 def preprocess():
-    tweets = pd.read_csv('data/Dataset.csv')
+    tweets = pd.read_csv('Dataset.csv')
 
     # extract hashtags
     tweets['hashtag'] = tweets['Tweet'].apply(lambda x: re.findall(r"#(\w+)", x))
