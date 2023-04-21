@@ -25,6 +25,16 @@ def classify_tweet_sentiment(tweet):
     else:
         return 0
 
+def calculate_influence(likes, followers, retweets, verified):
+    
+    like_weight = 1
+    follower_weight = 2
+    retweet_weight = 3
+    verified_weight = 5
+
+    influence = (likes * like_weight) + (followers * follower_weight) + (retweets * retweet_weight) + (verified * verified_weight)
+    
+    return influence
 
 #
 # preprocess data
@@ -84,5 +94,8 @@ def preprocess():
 
     # Classify tweets
     tweets['Sentiment'] = tweets['Tweet'].apply(classify_tweet_sentiment)
+
+    # Calculte Influence
+    tweets['Influence'] = tweets.apply(lambda x: calculate_influence(x['Number of Likes'], x['Followers count'], x['Retweet count'], x['Verified']), axis=1)
 
     tweets.to_csv('Preprocessed.csv')
